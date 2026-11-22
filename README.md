@@ -12,7 +12,7 @@ Requires **Python 3.11 or 3.12** and Git. About 1 GB of disk. No GPU, no PyTorch
 
 **Windows (PowerShell)**
 ```powershell
-git clone <this-repo-url> cloudserve-triage
+git clone https://github.com/bhanuk16/cloudserve-support-triage.git cloudserve-triage
 cd cloudserve-triage
 python -m venv .venv
 .venv\Scripts\activate
@@ -25,7 +25,7 @@ python -m src.classify --train  # trains the classifier (~10 s, deterministic)
 
 **macOS / Linux**
 ```bash
-git clone <this-repo-url> cloudserve-triage
+git clone https://github.com/bhanuk16/cloudserve-support-triage.git cloudserve-triage
 cd cloudserve-triage
 python3 -m venv .venv
 source .venv/bin/activate
