@@ -1,0 +1,46 @@
+name: CI
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.11", "3.12"]
+    runs-on: ${{ matrix.os }}
+    env:
+      LLM_PROVIDER: mock   # tests never call a real model and need no secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -r requirements.txt
+      - name: Cache embedding model
+        uses: actions/cache@v4
+        with:
+          path: models
+          key: minilm-onnx-913d7300
+      - run: python -m src.setup_models
+      - run: python -m src.classify --train
+      - run: python -m pytest tests/ -v
+      - name: Unattended run on the validation set (offline mock model)
+        run: python -m evaluation.harness --input data/validation_tickets.json --output evaluation/results/ci
+      - name: Decision log integrity
+        run: python -m src.decision_log --verify
+
+  secrets-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
