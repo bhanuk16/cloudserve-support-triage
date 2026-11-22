@@ -1,0 +1,73 @@
+{
+  "_comment": "Routing policy. Readable and editable by the support manager; every rule is cited in the decision log by id. Changes take effect on restart. Thresholds were chosen from out-of-fold predictions on the development set - see docs/thresholds.md.",
+  "version": "RP-1.1",
+  "never_auto_intents": {
+    "rule_id": "R1",
+    "intents": [
+      "security_incident",
+      "compliance_request",
+      "feature_request",
+      "unclear_request"
+    ],
+    "reason": "This type of request always goes to a person: security and compliance carry contractual and legal risk, and feature or unclear requests have no documented answer."
+  },
+  "sensitive_topic_tripwire": {
+    "rule_id": "R1b",
+    "patterns": [
+      "someone (else )?(has )?(accessed|logged in|got into|is using)",
+      "unauthori[sz]ed",
+      "compromis",
+      "breach",
+      "hack(ed|er)",
+      "suspicious (login|sign.?in|activity)",
+      "(don.?t|do not|didn.?t|did not) recogni[sz]e",
+      "leak(ed)?",
+      "stolen",
+      "phish",
+      "chargeback",
+      "dispute (the|this|a) (charge|invoice)",
+      "legal action",
+      "lawyer",
+      "gdpr (request|complaint)",
+      "subpoena"
+    ],
+    "reason": "The ticket mentions a possible security compromise, a payment dispute or a legal matter. These always go to a person, whatever the classifier thinks the ticket is about (safety net independent of the model)."
+  },
+  "sensitive_runner_up": {
+    "rule_id": "R1c",
+    "intents": [
+      "security_incident",
+      "compliance_request"
+    ],
+    "min_probability": 0.1,
+    "reason": "The classifier's leading guess is a routine request, but it also gives real weight to a security or compliance reading, so a person should check."
+  },
+  "incident_intents": {
+    "rule_id": "R2",
+    "intents": [
+      "performance_degradation",
+      "database_issue"
+    ],
+    "urgency": "high",
+    "min_urgency_confidence": 0.55,
+    "reason": "A live, high-urgency performance or database incident needs an engineer looking at the customer's own system, not only a documentation answer."
+  },
+  "intent_confidence_threshold": {
+    "rule_id": "R3",
+    "value": 0.8,
+    "reason": "The classifier was not confident enough about what this ticket is asking."
+  },
+  "answerable_threshold": {
+    "rule_id": "R4",
+    "value": 0.6,
+    "reason": "The ticket looks unlikely to be answerable from the knowledge base."
+  },
+  "retrieval": {
+    "rule_id": "R5",
+    "reason": "No documentation passage was relevant enough to ground an answer."
+  },
+  "kill_switch": {
+    "rule_id": "R0",
+    "reason": "Automatic answering is switched off (kill switch); every ticket goes to a person."
+  }
+}
