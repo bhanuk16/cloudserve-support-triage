@@ -1,0 +1,18 @@
+# Pinned, tested on Python 3.11 and 3.12 (Linux and Windows, see .github/workflows/ci.yml).
+# No PyTorch: embeddings run through ONNX Runtime (see docs/design-decisions.md, DD-01).
+chromadb==1.5.9
+rank-bm25==0.2.2
+numpy==2.4.6
+scikit-learn==1.9.1
+scipy==1.17.1
+onnxruntime==1.32.0
+tokenizers==0.23.3
+langgraph==1.2.22
+langchain-core==1.8.1
+pydantic==2.14.3
+httpx==0.28.1
+python-dotenv==1.2.4
+fastapi==0.163.1
+uvicorn==0.54.0
+prometheus-client==0.26.0
+pytest==9.2.0

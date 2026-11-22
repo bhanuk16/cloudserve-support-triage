@@ -1,0 +1,19 @@
+# secrets
+.env
+*.key
+# environments
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# generated at setup or run time
+models/
+storage/
+evaluation/results/*
+!evaluation/results/.gitkeep
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
